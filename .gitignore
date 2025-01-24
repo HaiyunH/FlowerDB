@@ -1,0 +1,67 @@
+# WeChat Mini Program specific
+miniprogram_npm/
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# WeChat developer tools
+project.private.config.json
+project.config.json.bak
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# MongoDB
+dump/
+*.dump
+*.bson
+*.gz
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# System files
+Thumbs.db
+.DS_Store
+*.tmp
+*.bak
+*.swp
+
+# Build and temp directories
+/dist/
+/tmp/
+/out/
+/build/
+
+# Local development files
+local.properties
+*.local
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Optional: Ignore specific image/asset directories if needed
+# /images/temp/
+# /mockBouquets/temp/ 

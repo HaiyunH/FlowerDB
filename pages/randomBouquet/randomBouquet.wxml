@@ -1,0 +1,26 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>Finding a random bouquet...</text>
+  </view>
+
+  <view wx:if="{{error}}" class="error">
+    <text>{{error}}</text>
+    <button bindtap="loadRandomBouquet">Retry</button>
+  </view>
+
+  <view wx:if="{{bouquet}}" class="bouquet-display">
+    <image src="{{bouquet.image}}" mode="aspectFill" class="bouquet-image"/>
+    <view class="bouquet-info">
+      <text class="bouquet-name">{{bouquet.name}}</text>
+      <text class="bouquet-price">¥{{bouquet.price}}</text>
+      <view class="materials">
+        <text wx:for="{{bouquet.materials}}" 
+              wx:key="name" 
+              class="material-tag">
+          {{item.name}} x{{item.quantity}}
+        </text>
+      </view>
+    </view>
+    <button class="refresh-btn" bindtap="onRefresh">Try Another</button>
+  </view>
+</view> 

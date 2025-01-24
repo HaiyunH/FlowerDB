@@ -1,0 +1,73 @@
+<view class="container">
+  <!-- Filter Bar -->
+  <scroll-view scroll-x class="filter-bar">
+    <view class="filter-pills">
+      <view class="pill {{filters.inStockToday ? 'active' : ''}}" 
+            bindtap="toggleFilter" 
+            data-type="inStockToday">
+        今日
+      </view>
+      <view class="pill {{filters.priceRange === 'under100' ? 'active' : ''}}" 
+            bindtap="togglePriceFilter" 
+            data-range="under100">
+        ¥100以下
+      </view>
+      <view class="pill {{filters.priceRange === '100-200' ? 'active' : ''}}" 
+            bindtap="togglePriceFilter" 
+            data-range="100-200">
+        ¥100-200
+      </view>
+      <view class="pill {{filters.priceRange === '200-300' ? 'active' : ''}}" 
+            bindtap="togglePriceFilter" 
+            data-range="200-300">
+        ¥200-300
+      </view>
+      <view class="pill {{filters.priceRange === 'above300' ? 'active' : ''}}" 
+            bindtap="togglePriceFilter" 
+            data-range="above300">
+        ¥300+
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Loading State -->
+  <view wx:if="{{loading && !bouquets.length}}" class="loading">
+    <text>Loading bouquets...</text>
+  </view>
+
+  <!-- Error State -->
+  <view wx:if="{{error}}" class="error">
+    <text>{{error}}</text>
+    <button bindtap="loadBouquets">Retry</button>
+  </view>
+
+  <!-- Bouquet List -->
+  <view class="bouquet-grid">
+    <view wx:for="{{bouquets}}" 
+          wx:key="_id" 
+          class="bouquet-card">
+      <image src="{{item.image}}" 
+             mode="aspectFill" 
+             class="bouquet-image"
+             binderror="handleImageError"
+             data-index="{{index}}"/>
+      <view class="bouquet-info">
+        <text class="bouquet-name">{{item.name}}</text>
+        <text class="bouquet-price">¥{{item.price}}</text>
+        <view class="materials">
+          <text wx:for="{{item.materials}}" 
+                wx:key="name" 
+                wx:for-item="material"
+                class="material-tag">
+            {{material.name}} x{{material.quantity}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Bottom Loading -->
+  <view wx:if="{{loading && bouquets.length}}" class="bottom-loading">
+    <text>Loading more...</text>
+  </view>
+</view> 

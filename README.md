@@ -24,15 +24,16 @@ A WeChat Mini Program for displaying and managing flower bouquet inventory. User
 - MongoDB Atlas
 
 ## Project Structure
+```
 ├── pages/
-│ ├── index/ # Homepage
-│ ├── bouquetList/ # Bouquet list page
-│ ├── randomBouquet/ # Random bouquet page
+│   ├── index/               # Homepage
+│   ├── bouquetList/         # Bouquet list page
+│   ├── randomBouquet/       # Random bouquet page
 ├── utils/
-│ ├── filter.js # Filter logic
-├── app.js # Global logic
-├── app.json # Global configuration
-├── project.config.json # Mini Program configuration
+│   ├── filter.js            # Filter logic
+├── app.js                   # Global logic
+├── app.json                 # Global configuration
+├── project.config.json      # Mini Program configuration
 
 ## Database Schema
 

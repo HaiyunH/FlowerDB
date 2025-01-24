@@ -34,6 +34,7 @@ A WeChat Mini Program for displaying and managing flower bouquet inventory. User
 ├── app.js                   # Global logic
 ├── app.json                 # Global configuration
 ├── project.config.json      # Mini Program configuration
+```
 
 ## Database Schema
 

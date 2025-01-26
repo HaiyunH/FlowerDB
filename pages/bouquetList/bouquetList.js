@@ -2,17 +2,7 @@ const api = require('../../utils/api')
 const { filterBouquets } = require('../../utils/filter')
 
 Page({
-  /**
-   * Page initial data
-   * bouquets: Array of bouquet objects
-   * loading: Loading state flag
-   * error: Error message if any
-   * pageSize: Number of items per page
-   * currentPage: Current page number
-   * hasMore: Flag indicating if more items can be loaded
-   * filters: Current active filters
-   * defaultImage: Default image path
-   */
+  
   data: {
     bouquets: [],
     loading: false,
@@ -24,7 +14,7 @@ Page({
       inStockToday: false,
       priceRange: null
     },
-    defaultImage: '/images/default-bouquet.png'
+    defaultImage: '/images/default-bouquet.png' // Add default image path
   },
 
   /**
@@ -48,7 +38,6 @@ Page({
    * @param {boolean} loadMore - Whether to append results or replace existing ones
    */
   async loadBouquets(loadMore = false) {
-    // Prevent multiple simultaneous loading requests
     if (this.data.loading) return
 
     try {
@@ -80,16 +69,20 @@ Page({
         }
       }
 
-      const newBouquets = await api.getBouquets(params)
-      console.log('Bouquet images:', newBouquets.map(b => b.image))
-      
+      const { bouquets, hasMore } = await api.getBouquets(params)
+      // Get temperory URL
+      const fileIDs = bouquets.map(item => item.fileID)
+      const tempFileURLs = await this.getTempFileURLs(fileIDs)
+      const updatedBouquets = bouquets.map((item, index) => ({
+        ...item,
+        imsrcage: tempFileURLs[index], // Add the temporary URL to each bouquet object
+      }))
+
       // Update state with new bouquets
       this.setData({
-        // Append or replace bouquets based on loadMore flag
-        bouquets: loadMore ? [...this.data.bouquets, ...newBouquets] : newBouquets,
+        bouquets: loadMore ? [...this.data.bouquets, ...updatedBouquets] : updatedBouquets,
         currentPage: params.page,
-        // Check if we've reached the last page
-        hasMore: newBouquets.length === this.data.pageSize,
+        hasMore,
         loading: false
       })
     } catch (error) {
@@ -101,9 +94,24 @@ Page({
   },
 
   /**
-   * Called when user pulls down to refresh
-   * Reloads the first page of bouquets
-   */
+ * Fetches temporary URLs for a list of file IDs
+ * @param {Array<string>} fileIDs - List of file IDs
+ * @returns {Promise<Array<string>>} - List of temporary URLs
+ */
+async getTempFileURLs(fileIDs) {
+  try {
+    const res = await wx.cloud.getTempFileURL({
+      fileList: fileIDs,
+    });
+    return res.fileList.map(file => file.tempFileURL); // Extract temporary URLs
+  } catch (error) {
+    console.error('Error fetching temporary URLs:', error);
+    return fileIDs.map(() => '/images/default-image.png'); // Fallback to default image
+  }
+},
+
+
+   
   onPullDownRefresh() {
     this.loadBouquets().then(() => {
       wx.stopPullDownRefresh()

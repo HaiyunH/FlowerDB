@@ -46,7 +46,7 @@
     <view wx:for="{{bouquets}}" 
           wx:key="_id" 
           class="bouquet-card">
-      <image src="{{item.image}}" 
+      <image src="{{item.imsrcage}}" 
              mode="aspectFill" 
              class="bouquet-image"
              binderror="handleImageError"

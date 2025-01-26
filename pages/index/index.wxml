@@ -5,18 +5,18 @@
   
   <view class="entry-points">
     <view class="entry-item" bindtap="navigateToBouquets" data-type="today">
-      <image src="/images/today.png" mode="aspectFit"></image>
-      <text>Today's Bouquets</text>
+      <view class="entry-background" style="background-image: url('/images/today.png');"></view>
+      <text class="entry-text">Today's Bouquets</text>
     </view>
-    
+
     <view class="entry-item" bindtap="navigateToBouquets" data-type="all">
-      <image src="/images/all.png" mode="aspectFit"></image>
-      <text>All Bouquets</text>
+      <view class="entry-background" style="background-image: url('/images/all.png');"></view>
+      <text class="entry-text">All Bouquets</text>
     </view>
-    
+
     <view class="entry-item" bindtap="navigateToRandom">
-      <image src="/images/random.png" mode="aspectFit"></image>
-      <text>Random Bouquet</text>
+      <view class="entry-background" style="background-image: url('/images/random.png');"></view>
+      <text class="entry-text">Random Bouquet</text>
     </view>
   </view>
 </view> 

@@ -1,12 +1,20 @@
 App({
   globalData: {
-    apiBaseUrl: 'http://your-api-base-url.com', // Replace with your actual API base URL
     bouquets: [],
     currentFilters: {}
   },
   
   onLaunch() {
-    // Initialize the app
+    // Initialize cloud
+    if (!wx.cloud) {
+      console.error('Please use WeChat version 2.2.3 or above')
+    } else {
+      wx.cloud.init({
+        env: 'flowerdb-8g0q6tv0bb7e5950', // Replace with your cloud environment ID
+        traceUser: true
+      })
+    }
+    
     this.checkSession()
   },
 

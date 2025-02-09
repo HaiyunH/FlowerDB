@@ -1,34 +1,50 @@
 <view class="container">
-  <!-- Filter Bar -->
-  <scroll-view scroll-x class="filter-bar">
-    <view class="filter-pills">
-      <view class="pill {{filters.inStockToday ? 'active' : ''}}" 
-            bindtap="toggleFilter" 
-            data-type="inStockToday">
-        今日
+  <!-- Two-row Filter Bar -->
+  <view class="filter-container">
+    <!-- Price Range Filters -->
+    <scroll-view scroll-x class="filter-row">
+      <view class="filter-pills">
+        <view class="filter-pill {{filters.priceRange === 'under100' ? 'active' : ''}}" 
+              bindtap="togglePriceFilter" 
+              data-range="under100">
+          ¥100以下
+        </view>
+        <view class="filter-pill {{filters.priceRange === '100-200' ? 'active' : ''}}" 
+              bindtap="togglePriceFilter" 
+              data-range="100-200">
+          ¥100-200
+        </view>
+        <view class="filter-pill {{filters.priceRange === '200-300' ? 'active' : ''}}" 
+              bindtap="togglePriceFilter" 
+              data-range="200-300">
+          ¥200-300
+        </view>
+        <view class="filter-pill {{filters.priceRange === 'above300' ? 'active' : ''}}" 
+              bindtap="togglePriceFilter" 
+              data-range="above300">
+          ¥300+
+        </view>
       </view>
-      <view class="pill {{filters.priceRange === 'under100' ? 'active' : ''}}" 
-            bindtap="togglePriceFilter" 
-            data-range="under100">
-        ¥100以下
+    </scroll-view>
+
+    <!-- Tags Filters -->
+    <scroll-view scroll-x class="filter-row">
+      <view class="filter-pills">
+        <view class="filter-pill {{filters.inStockToday ? 'active' : ''}}" 
+              bindtap="toggleFilter" 
+              data-type="inStockToday">
+          今日有货
+        </view>
+        <view wx:for="{{allTags}}" 
+              wx:key="*this"
+              class="filter-pill {{tagStates[item] ? 'active' : ''}}"
+              bindtap="toggleTagFilter"
+              data-tag="{{item}}">
+          {{item}}
+        </view>
       </view>
-      <view class="pill {{filters.priceRange === '100-200' ? 'active' : ''}}" 
-            bindtap="togglePriceFilter" 
-            data-range="100-200">
-        ¥100-200
-      </view>
-      <view class="pill {{filters.priceRange === '200-300' ? 'active' : ''}}" 
-            bindtap="togglePriceFilter" 
-            data-range="200-300">
-        ¥200-300
-      </view>
-      <view class="pill {{filters.priceRange === 'above300' ? 'active' : ''}}" 
-            bindtap="togglePriceFilter" 
-            data-range="above300">
-        ¥300+
-      </view>
-    </view>
-  </scroll-view>
+    </scroll-view>
+  </view>
 
   <!-- Loading State -->
   <view wx:if="{{loading && !bouquets.length}}" class="loading">

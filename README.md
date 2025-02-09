@@ -1,102 +1,129 @@
 # Flower Bouquet Mini Program
 
-A WeChat Mini Program for displaying and managing flower bouquet inventory. Users can browse bouquets, filter by price and availability, and view random bouquet suggestions.
+A WeChat Mini Program designed for displaying and managing a flower bouquet inventory. Users can browse bouquets, filter them by price and availability, and view random bouquet suggestions.
 
 ## Features
 
-- **Today's Bouquets**: View bouquets currently in stock
-- **All Bouquets**: Browse complete bouquet catalog
-- **Random Bouquet**: Get random bouquet suggestions
-- **Filter System**: Filter bouquets by:
+- **Today's Bouquets**: View bouquets that are currently in stock.
+- **All Bouquets**: Browse the complete catalog of available bouquets.
+- **Random Bouquet**: Get random bouquet suggestions for a surprise selection.
+- **Filter System**: Filter bouquets based on:
   - Availability (今日)
-  - Price ranges (¥100以下, ¥100-200, ¥200-300, ¥300+)
+  - Price ranges:
+    - ¥100以下 (Under ¥100)
+    - ¥100-200
+    - ¥200-300
+    - ¥300+ (Above ¥300)
 
 ## Tech Stack
 
 ### Frontend
-- WeChat Mini Program Framework
-- WXML/WXSS
-- JavaScript
+- **WeChat Mini Program Framework**: Utilizes WeChat's native framework for building mini programs.
+- **WXML/WXSS**: WeChat's markup and styling languages.
+- **JavaScript**: For logic and interactivity.
 
 ### Backend
-- Node.js
-- Express.js
-- MongoDB Atlas
+- **Cloud Database**: Utilizes WeChat's cloud database for data storage and retrieval.
+- **Cloud Functions**: For serverless backend logic.
 
 ## Project Structure
+
 ```
+FlowerMiniApp/
 ├── pages/
 │   ├── index/               # Homepage
 │   ├── bouquetList/         # Bouquet list page
 │   ├── randomBouquet/       # Random bouquet page
 ├── utils/
-│   ├── filter.js            # Filter logic
-├── app.js                   # Global logic
-├── app.json                 # Global configuration
-├── project.config.json      # Mini Program configuration
+│   ├── api.js               # API utility for cloud database operations
+│   ├── filter.js            # Filter logic for bouquets
+├── mockBouquets/            # Folder containing bouquet images
+├── app.js                   # Global application logic
+├── app.json                 # Global configuration for the mini program
+├── project.config.json      # Configuration for WeChat developer tools
+└── .gitignore               # Git ignore file for version control
 ```
 
 ## Database Schema
 
 ### Bouquets Collection
-json
+Each bouquet document in the cloud database should follow this structure:
+```json
 {
-"id": "unique_bouquet_id",
-"name": "Dreamy Roses",
-"image": "image_url",
-"price": 100,
-"materials": [
-{"name": "Rose", "quantity": 10},
-{"name": "Baby's Breath", "quantity": 5}
-],
-"inStockToday": true
+  "_id": "unique_bouquet_id",
+  "name": "Dreamy Roses",
+  "image": "image_url", // URL of the bouquet image in cloud storage
+  "price": 100,
+  "materials": [
+    {"name": "Rose", "quantity": 10},
+    {"name": "Baby's Breath", "quantity": 5}
+  ],
+  "inStockToday": true // Boolean indicating availability today
 }
+```
 
 ### Materials Collection
-json
+Each material document should follow this structure:
+```json
 {
-"id": "unique_material_id",
-"name": "Rose",
-"description": "A popular flower material",
-"image": "material_image_url"
+  "_id": "unique_material_id",
+  "name": "Rose",
+  "description": "A popular flower material",
+  "image": "material_image_url" // URL of the material image in cloud storage
 }
-
-
-## API Endpoints
-
-- `GET /api/bouquets` - Retrieve all bouquets
-- `GET /api/bouquets?inStockToday=true` - Get today's available bouquets
-- `GET /api/randomBouquet` - Get a random bouquet
-- `GET /api/materials` - Get material details
+```
 
 ## Setup and Installation
 
-1. Clone the repository
-2. Install dependencies
-3. Configure MongoDB Atlas connection
-4. Set up WeChat developer tools
-5. Import the project
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/FlowerMiniApp.git
+   cd FlowerMiniApp
+   ```
+
+2. **Set Up WeChat Cloud Development**:
+   - Open WeChat Developer Tools.
+   - Create a new project and select "Cloud Development".
+   - Set up your cloud environment (e.g., `flowerdb-8g0q6tv0bb7e5950`).
+
+3. **Configure Cloud Database**:
+   - Create two collections in the cloud database: `bouquets` and `materials`.
+   - Populate these collections with sample data based on the provided schema.
+
+4. **Import the Project**:
+   - Import the cloned project into WeChat Developer Tools.
+   - Ensure that the project settings are correctly configured.
+
+5. **Run the Project**:
+   - Use the WeChat Developer Tools to preview and test the mini program.
 
 ## Development
 
-1. Frontend Development
-   - Implement page layouts
-   - Set up navigation
-   - Integrate filter system
+### Frontend Development
+- Implement page layouts using WXML and WXSS.
+- Set up navigation between pages (Homepage, Bouquet List, Random Bouquet).
+- Integrate the filter system to allow users to filter bouquets based on availability and price.
 
-2. Backend Development
-   - Initialize MongoDB database
-   - Set up API endpoints
-   - Implement data backup system
+### Backend Development
+- Utilize WeChat's cloud functions to handle data retrieval and storage.
+- Implement API calls to fetch bouquets and materials from the cloud database.
+- Ensure proper error handling and loading states for a smooth user experience.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Contact
 
-Project Owner: Haiyun Huang
+**Project Owner**: Haiyun Huang  
+**Email**: your.email@example.com  
+**GitHub**: [yourusername](https://github.com/yourusername)
+
+## Acknowledgments
+
+- WeChat Mini Program documentation for guidance on cloud development.
+- Inspiration from various floral design resources and applications.

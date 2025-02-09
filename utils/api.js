@@ -11,54 +11,55 @@ const api = {
    * @returns {Promise<Array>} Array of bouquet objects
    */
   getBouquets: async (params = {}) => {
-    const { page = 1, pageSize = 10, inStockToday, minPrice, maxPrice } = params
+    const { page = 1, pageSize = 10, inStockToday, minPrice, maxPrice, selectedTags = [] } = params
     const skip = (page - 1) * pageSize
     
     let query = db.collection('bouquets')
-
-    // Build query conditions
     let conditions = {}
     
-    if (inStockToday) {
-      conditions.inStockToday = true
+    // 使用 stock_price_idx 索引的查询条件
+    if (inStockToday || minPrice !== undefined || maxPrice !== undefined) {
+      if (inStockToday) {
+        conditions.inStockToday = true
+      }
+      
+      if (minPrice !== undefined || maxPrice !== undefined) {
+        conditions.price = {}
+        if (minPrice !== undefined) {
+          conditions.price = _.gte(minPrice)
+        }
+        if (maxPrice !== undefined) {
+          conditions.price = _.lte(maxPrice)
+        }
+      }
     }
 
-    if (minPrice !== undefined || maxPrice !== undefined) {
-      conditions.price = {}
-      if (minPrice !== undefined) {
-        conditions.price = _.gte(minPrice)
-      }
-      if (maxPrice !== undefined) {
-        conditions.price = _.lte(maxPrice)
-      }
+    // 使用 tags_idx 索引的查询条件
+    if (selectedTags.length > 0) {
+      conditions.tags = _.all(selectedTags)
     }
-    
-    // Apply conditions
+
+    // 应用查询条件
     if (Object.keys(conditions).length > 0) {
       query = query.where(conditions)
     }
 
-    // Get total count for pagination
+    // 获取总数用于分页
     const countResult = await query.count()
     const total = countResult.total
 
-    // Get paginated results
+    // 获取分页结果
     const bouquets = await query
       .skip(skip)
       .limit(pageSize)
       .get()
       .then(res => res.data)
-      //console.log("bouquets(1):", bouquets); // Log the result here
-      //console.log("bouquets.data:", bouquets.data); // Log the result here
 
-      const result = {
-        bouquets,
-        total,
-        hasMore: skip + bouquets.length < total,
-      };
-  
-      //console.log("Bouquets Data:", result); // Log the result here
-      return result;
+    return {
+      bouquets,
+      total,
+      hasMore: skip + bouquets.length < total
+    }
   },
 
   /**

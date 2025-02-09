@@ -10,11 +10,15 @@ Page({
     pageSize: 10,
     currentPage: 1,
     hasMore: true,
+    allTags: [], // Store all unique tags
+    selectedTagsMap: {}, // 使用对象来跟踪选中状态
     filters: {
       inStockToday: false,
-      priceRange: null
+      priceRange: null,
+      selectedTags: [] // Array to store selected tag filters
     },
-    defaultImage: '/images/default-bouquet.png' // Add default image path
+    defaultImage: '/images/default-bouquet.png', // Add default image path
+    tagStates: {} // 用于追踪标签选中状态
   },
 
   /**
@@ -22,15 +26,38 @@ Page({
    * Sets initial filters based on navigation parameters
    * @param {object} options - Page navigation parameters
    */
-  onLoad(options) {
+  async onLoad(options) {
     // Set filter for today's bouquets if navigated from today's section
     if (options.type === 'today') {
       this.setData({
-        filters: { inStockToday: true }
+        'filters.inStockToday': true
       })
     }
     
+    // Load all bouquets and extract unique tags
+    await this.extractUniqueTags()
     this.loadBouquets()
+  },
+
+  /**
+   * Extracts unique tags from all bouquets
+   */
+  async extractUniqueTags() {
+    try {
+      // Get all bouquets without pagination to extract tags
+      const { bouquets } = await api.getBouquets({ pageSize: 999 })
+      
+      // Extract and flatten all tags, then remove duplicates
+      const uniqueTags = [...new Set(
+        bouquets
+          .flatMap(bouquet => bouquet.tags || [])
+          .filter(tag => tag) // Remove null/undefined
+      )]
+
+      this.setData({ allTags: uniqueTags })
+    } catch (error) {
+      console.error('Error extracting tags:', error)
+    }
   },
 
   /**
@@ -46,7 +73,8 @@ Page({
       const params = {
         page: loadMore ? this.data.currentPage + 1 : 1,
         pageSize: this.data.pageSize,
-        inStockToday: this.data.filters.inStockToday
+        inStockToday: this.data.filters.inStockToday,
+        selectedTags: this.data.filters.selectedTags // Pass selected tags to API
       }
 
       // Add price range parameters
@@ -163,6 +191,34 @@ async getTempFileURLs(fileIDs) {
     }
     
     this.setData({ filters }, () => {
+      this.loadBouquets()
+    })
+  },
+
+  /**
+   * Toggles a tag filter
+   */
+  toggleTagFilter(e) {
+    const tag = e.currentTarget.dataset.tag
+    let selectedTags = [...this.data.filters.selectedTags]
+    let tagStates = { ...this.data.tagStates }
+    
+    const index = selectedTags.indexOf(tag)
+    if (index === -1) {
+      selectedTags.push(tag)
+      tagStates[tag] = true
+    } else {
+      selectedTags.splice(index, 1)
+      tagStates[tag] = false
+    }
+    
+    this.setData({
+      tagStates,
+      filters: {
+        ...this.data.filters,
+        selectedTags
+      }
+    }, () => {
       this.loadBouquets()
     })
   }
